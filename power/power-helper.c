@@ -145,6 +145,8 @@ struct stat_pair wlan_stat_map[] = {
 };
 #endif
 
+#define DOUBLE_TAP_FILE "/proc/touchpanel/double_tap_enable"
+
 static int saved_dcvs_cpu0_slack_max = -1;
 static int saved_dcvs_cpu0_slack_min = -1;
 static int saved_mpdecision_slack_max = -1;
@@ -550,7 +552,15 @@ void power_set_interactive(int on)
     saved_interactive_mode = !!on;
 }
 
-void __attribute__((weak)) set_device_specific_feature(feature_t UNUSED(feature), int UNUSED(state))
+void set_feature(struct power_module __unused *module, feature_t feature, int state) {
+    if (feature == POWER_FEATURE_DOUBLE_TAP_TO_WAKE) {
+        ALOGI("%s POWER_FEATURE_DOUBLE_TAP_TO_WAKE %s", __func__, (state ? "ON" : "OFF"));
+        sysfs_write(DOUBLE_TAP_FILE, state ? "1" : "0");
+    }
+}
+
+static int power_device_open(const hw_module_t* module, const char* name,
+        hw_device_t** device)
 {
 }
 
@@ -723,13 +733,19 @@ static int extract_stats(uint64_t *list, char *file,
     return ret;
 }
 
-int extract_platform_stats(uint64_t *list) {
-    return extract_stats(list, RPM_SYSTEM_STAT, rpm_stat_map, ARRAY_SIZE(rpm_stat_map));
-}
+struct power_module HAL_MODULE_INFO_SYM = {
+    .common = {
+        .tag = HARDWARE_MODULE_TAG,
+        .module_api_version = POWER_MODULE_API_VERSION_0_2,
+        .hal_api_version = HARDWARE_HAL_API_VERSION,
+        .id = POWER_HARDWARE_MODULE_ID,
+        .name = "QCOM Power HAL",
+        .author = "Qualcomm",
+        .methods = &power_module_methods,
+    },
 
-#ifndef V1_0_HAL
-int extract_wlan_stats(uint64_t *list) {
-    return extract_stats(list, WLAN_POWER_STAT, wlan_stat_map, ARRAY_SIZE(wlan_stat_map));
-}
-#endif
-#endif
+    .init = power_init,
+    .powerHint = power_hint,
+    .setInteractive = set_interactive,
+    .setFeature = set_feature
+};
