@@ -562,46 +562,31 @@ void set_feature(struct power_module __unused *module, feature_t feature, int st
 static int power_device_open(const hw_module_t* module, const char* name,
         hw_device_t** device)
 {
-}
+    int status = -EINVAL;
+    if (module && name && device) {
+        if (!strcmp(name, POWER_HARDWARE_MODULE_ID)) {
+            power_module_t *dev = (power_module_t *)malloc(sizeof(*dev));
 
-void set_feature(feature_t feature, int state)
-{
-    switch (feature) {
-#ifdef TAP_TO_WAKE_NODE
-        case POWER_FEATURE_DOUBLE_TAP_TO_WAKE:
-            sysfs_write(TAP_TO_WAKE_NODE, state ? "1" : "0");
-            break;
-#endif
-        default:
-            break;
-    }
-    set_device_specific_feature(feature, state);
-}
+            if(dev) {
+                memset(dev, 0, sizeof(*dev));
 
-static int parse_stats(const char **params, size_t params_size,
-                       uint64_t *list, FILE *fp) {
-    ssize_t nread;
-    size_t len = LINE_SIZE;
-    char *line;
-    size_t params_read = 0;
-    size_t i;
-    line = malloc(len);
-    if (!line) {
-        ALOGE("%s: no memory to hold line", __func__);
-        return -ENOMEM;
-    }
-    while ((params_read < params_size) &&
-        (nread = getline(&line, &len, fp) > 0)) {
-        char *key = line + strspn(line, " \t");
-        char *value = strchr(key, ':');
-        if (!value || (value > (line + len)))
-            continue;
-        *value++ = '\0';
-        for (i = 0; i < params_size; i++) {
-            if (!strcmp(key, params[i])) {
-                list[i] = strtoull(value, NULL, 0);
-                params_read++;
-                break;
+                if(dev) {
+                    /* initialize the fields */
+                    dev->common.module_api_version = POWER_MODULE_API_VERSION_0_2;
+                    dev->common.tag = HARDWARE_DEVICE_TAG;
+                    dev->init = power_init;
+                    dev->powerHint = power_hint;
+                    dev->setInteractive = set_interactive;
+                    /* At the moment we support 0.2 APIs */
+                    dev->setFeature = set_feature,
+                        dev->get_number_of_platform_modes = NULL,
+                        dev->get_platform_low_power_stats = NULL,
+                        dev->get_voter_list = NULL,
+                        *device = (hw_device_t*)dev;
+                    status = 0;
+                } else {
+                    status = -ENOMEM;
+                }
             }
         }
     }
