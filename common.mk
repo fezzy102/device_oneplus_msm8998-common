@@ -227,9 +227,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libjson
 
-PRODUCT_PACKAGES += \
-    ims-ext-common
-
 # RIL
 PRODUCT_PACKAGES += \
     librmnetctl \
@@ -239,6 +236,14 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     qcnvitems \
     qcrilhook
+
+# Telephony packages
+PRODUCT_PACKAGES += \
+    ims-ext-common \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += \
+    telephony-ext
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
