@@ -224,6 +224,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     libjson
 
+PRODUCT_PACKAGES += \
+    ims-ext-common
+
 # RIL
 PRODUCT_PACKAGES += \
     librmnetctl \
