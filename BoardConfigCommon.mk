@@ -80,6 +80,9 @@ BOARD_KERNEL_CMDLINE += androidboot.selinux=permissive
 BOARD_USES_QCOM_HARDWARE := true
 TARGET_USES_QCOM_BSP := true
 
+# ANT+
+BOARD_ANT_WIRELESS_DEVICE := "qualcomm-uart"
+
 # Audio/media
 TARGET_QCOM_AUDIO_VARIANT := caf-msm8998
 TARGET_QCOM_MEDIA_VARIANT := caf-msm8998
