@@ -203,10 +203,11 @@ SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
 
 # Enable dexpreopt to speed boot time
 ifeq ($(HOST_OS),linux)
-  ifneq ($(TARGET_BUILD_VARIANT),user)
+  ifneq ($(TARGET_BUILD_VARIANT),eng)
     ifeq ($(WITH_DEXPREOPT),)
       WITH_DEXPREOPT := true
-   endif
+      WITH_DEXPREOPT_BOOT_IMG_AND_SYSTEM_SERVER_ONLY := true
+    endif
   endif
 endif
 
