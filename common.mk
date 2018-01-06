@@ -145,11 +145,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(call find-copy-subdir-files,*,${LOCAL_PATH}/init/vendor,$(TARGET_COPY_OUT_VENDOR))
 
-# HIDL
-PRODUCT_PACKAGES += \
-    android.hidl.base@1.0 \
-    android.hidl.manager@1.0-java
-
 # IPv6
 PRODUCT_PACKAGES += \
     ebtables \
@@ -248,13 +243,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     sensors.msm8998
 
-# TCM
-PRODUCT_PACKAGES += \
-    tcmiface
-
-PRODUCT_BOOT_JARS += \
-    tcmiface
-
 # Tether offload
 PRODUCT_PACKAGES += \
     ipacm \
@@ -285,7 +273,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/wifi/wifi_concurrency_cfg.txt:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wifi_concurrency_cfg.txt
 
 # Inherit from oppo-common
-$(call inherit-product, device/oppo/common/common.mk)
+#$(call inherit-product, device/oppo/common/common.mk)
 
 # System properties
 -include $(LOCAL_PATH)/system_prop.mk
