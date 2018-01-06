@@ -106,6 +106,9 @@ PRODUCT_PACKAGES += \
 # Doze mode
 PRODUCT_PACKAGES += \
     OneplusThreeDoze
+    
+PRODUCT_PACKAGES += \
+    Oneplus3Parts
 
 # Fingerprint sensor
 PRODUCT_PACKAGES += \
