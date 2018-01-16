@@ -142,10 +142,7 @@ PRODUCT_PACKAGES += \
     com.android.ims.rcsmanager.xml \
     ims-ext-common \
     RcsService \
-    PresencePolling \
-    telephony-ext
-
-PRODUCT_BOOT_JARS += telephony-ext
+    PresencePolling
 
 # Init
 PRODUCT_COPY_FILES += \
