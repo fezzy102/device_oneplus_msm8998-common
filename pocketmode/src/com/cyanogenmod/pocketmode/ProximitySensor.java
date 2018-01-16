@@ -70,12 +70,7 @@ public class ProximitySensor implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        boolean isNear = event.values[0] < mSensor.getMaximumRange();
-        if (isFileWritable(FPC_FILE)) {
-            writeLine(FPC_FILE, isNear ? "1" : "0");
-        } else {
-            Log.e(TAG, "Proximity state file " + FPC_FILE + " is not writable!");
-        }
+        setFPProximityState(event.values[0] < mSensor.getMaximumRange());
     }
 
     @Override
@@ -102,56 +97,6 @@ public class ProximitySensor implements SensorEventListener {
         mSensorManager.unregisterListener(this, mSensor);
         // Ensure FP is left enabled
         setFPProximityState(/* isNear */ false);
-    }
-
-    /**
-     * Checks whether the given file exists
-     *
-     * @return true if exists, false if not
-     */
-    public static boolean fileExists(String fileName) {
-        final File file = new File(fileName);
-        return file.exists();
-    }
-
-    /**
-     * Checks whether the given file is writable
-     *
-     * @return true if writable, false if not
-     */
-    public static boolean isFileWritable(String fileName) {
-        final File file = new File(fileName);
-        return file.exists() && file.canWrite();
-    }
-
-    /**
-     * Writes the given value into the given file
-     *
-     * @return true on success, false on failure
-     */
-    public static boolean writeLine(String fileName, String value) {
-        BufferedWriter writer = null;
-
-        try {
-            writer = new BufferedWriter(new FileWriter(fileName));
-            writer.write(value);
-        } catch (FileNotFoundException e) {
-            Log.w(TAG, "No such file " + fileName + " for writing", e);
-            return false;
-        } catch (IOException e) {
-            Log.e(TAG, "Could not write to file " + fileName, e);
-            return false;
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                // Ignored, not much we can do anyway
-            }
-        }
-
-        return true;
     }
 
     /**
