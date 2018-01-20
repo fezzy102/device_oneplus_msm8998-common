@@ -231,6 +231,22 @@ PRODUCT_PROPERTY_OVERRIDES += \
     sys.usb.rndis.func.name=gsi \
     sys.usb.rmnet.func.name=gsi
 
+# Volte & WFC
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.dbg.volte_avail_ovr=1 \
+    persist.dbg.vt_avail_ovr=1 \
+    persist.radio.jbims=true \
+    persist.rcs.supported=1 \
+    persist.radio.cs_srv_type=0 \
+    persist.radio.domain.ps=false \
+    persist.radio.VT_HYBRID_ENABLE=1 \
+    persist.radio.VT_ENABLE=1 \
+    persist.radio.REVERSE_QMI=0 \
+    persist.radio.ROTATION_ENABLE=1 \
+    persist.radio.calls.on.ims=true \
+    persist.data.iwlan.enable=true \
+    persist.dbg.wfc_avail_ovr=1
+
 # Wi-Fi
 PRODUCT_PROPERTY_OVERRIDES += \
     wifi.interface=wlan0
