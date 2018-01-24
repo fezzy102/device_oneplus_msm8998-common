@@ -244,11 +244,13 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     librmnetctl \
     libxml2 \
-    libprotobuf-cpp-full
+    libprotobuf-cpp-full \
+    telephony-ext
 
 PRODUCT_BOOT_JARS += \
     qcnvitems \
-    qcrilhook
+    qcrilhook \
+    telephony-ext
 
 # Telephony packages
 PRODUCT_PACKAGES += \
