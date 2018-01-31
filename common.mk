@@ -242,6 +242,7 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    ims-ext-common \
     librmnetctl \
     libxml2 \
     libprotobuf-cpp-full \
@@ -250,14 +251,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_BOOT_JARS += \
     qcnvitems \
     qcrilhook \
-    telephony-ext
-
-# Telephony packages
-PRODUCT_PACKAGES += \
-    ims-ext-common \
-    telephony-ext
-
-PRODUCT_BOOT_JARS += \
     telephony-ext
 
 # Seccomp policy
