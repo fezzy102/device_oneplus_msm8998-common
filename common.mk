@@ -113,6 +113,7 @@ PRODUCT_PACKAGES += \
 
 # Fingerprint sensor
 PRODUCT_PACKAGES += \
+    android.hardware.biometrics.fingerprint@2.1-service \
     fingerprintd \
     OneplusPocketMode
 
@@ -251,6 +252,7 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
+    ims-ext-common \
     librmnetctl \
     libxml2 \
     libprotobuf-cpp-full
