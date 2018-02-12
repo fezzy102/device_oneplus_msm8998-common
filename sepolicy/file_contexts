@@ -29,7 +29,10 @@
 /sys/devices/bt_wcn3990/rfkill/rfkill0/state                    u:object_r:sysfs_bluetooth_writable:s0
 /sys/devices/bt_wcn3990/extldo                                  u:object_r:sysfs_bluetooth_writable:s0
 
-# Fingerprint
+# camera
+/(vendor|system/vendor)/bin/hw/android\.hardware\.camera\.provider@2\.4-service.oneplus5          u:object_r:hal_camera_default_exec:s0
+
+ Fingerprint
 /sys/devices/soc/soc:fpc_fpc1020/irq                            u:object_r:sysfs_fpc_irq:s0
 /sys/devices/soc/soc:fpc_fpc1020/report_home                    u:object_r:sysfs_fpc_key:s0
 /sys/devices/soc/soc:fpc_fpc1020/report_key                     u:object_r:sysfs_fpc_key:s0
