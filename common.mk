@@ -280,6 +280,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     textclassifier.smartselection.bundle1
 
+# Thermal
+PRODUCT_PACKAGES += \
+    thermal.msm8998
+
 # USB
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
