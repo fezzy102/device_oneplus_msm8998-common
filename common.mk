@@ -84,7 +84,24 @@ PRODUCT_COPY_FILES += \
 # Bluetooth
 PRODUCT_PACKAGES += \
     libbt-vendor \
+<<<<<<< HEAD
     libbthost_if
+=======
+    libbthost_if \
+    bt-mac-generator
+
+# Camera
+PRODUCT_PACKAGES += \
+    android.hardware.camera.provider@2.4-impl \
+    android.hardware.camera.provider@2.4-service \
+    camera.device@1.0-impl \
+    camera.device@3.2-impl \
+    Snap
+
+PRODUCT_PACKAGES += \
+    vendor.qti.hardware.camera.device@1.0 \
+    vendor.qti.hardware.camera.device@1.0_vendor
+>>>>>>> 18373f1... msm8998: Remove camera provider HAL fork
 
 # Connectivity Engine support (CNE)
 PRODUCT_PACKAGES += \
