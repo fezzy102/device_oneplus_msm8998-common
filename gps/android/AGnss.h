@@ -61,6 +61,8 @@ struct AGnss : public IAGnss {
                          const hidl_string& hostname, int32_t port) override;
     void statusIpV4Cb(AGnssExtStatusIpV4 status);
 
+    void statusIpV4Cb(AGnssExtStatusIpV4 status);
+
     /* Data call setup callback passed down to GNSS HAL implementation */
     static void agnssStatusIpV4Cb(AGnssExtStatusIpV4 status);
 

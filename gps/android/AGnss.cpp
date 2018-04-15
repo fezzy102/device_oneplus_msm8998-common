@@ -83,9 +83,13 @@ void AGnss::statusIpV4Cb(AGnssExtStatusIpV4 status) {
     }
     st.ipV4Addr = status.ipV4Addr;
 
-    auto r = sAGnssCbIface->agnssStatusIpV4Cb(st);
-    if (!r.isOk()) {
-        LOC_LOGE("Error invoking AGNSS status cb %s", r.description().c_str());
+    if (mAGnssCbIface != nullptr) {
+        auto r = mAGnssCbIface->agnssStatusIpV4Cb(st);
+        if (!r.isOk()) {
+            LOC_LOGw("Error invoking AGNSS status cb %s", r.description().c_str());
+        }
+    } else {
+        LOC_LOGw("setCallback has not been called yet");
     }
 }
 
