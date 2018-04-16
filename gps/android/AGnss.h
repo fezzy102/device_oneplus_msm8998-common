@@ -59,7 +59,6 @@ struct AGnss : public IAGnss {
 
     Return<bool> setServer(IAGnssCallback::AGnssType type,
                          const hidl_string& hostname, int32_t port) override;
-    void statusIpV4Cb(AGnssExtStatusIpV4 status);
 
     void statusIpV4Cb(AGnssExtStatusIpV4 status);
 
