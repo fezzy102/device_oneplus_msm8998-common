@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016 The CyanogenMod Project
+ * Copyright (c) 2018 The LineageOS Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,14 +23,23 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
-import org.cyanogenmod.internal.util.FileUtils;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class ProximitySensor implements SensorEventListener {
 
     private static final boolean DEBUG = false;
     private static final String TAG = "PocketModeProximity";
 
-    private static final String FPC_FILE = "/sys/devices/soc/soc:fpc_fpc1020/proximity_state";
+    private static final String CHEESEBURGER_FILE =
+            "/sys/devices/soc/soc:fpc_fpc1020/proximity_state";
+    private static final String DUMPLING_FILE =
+            "/sys/devices/soc/soc:goodix_fp/proximity_state";
+    private final String FPC_FILE;
 
     private SensorManager mSensorManager;
     private Sensor mSensor;
