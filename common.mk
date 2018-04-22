@@ -144,7 +144,10 @@ PRODUCT_PACKAGES += \
     com.android.ims.rcsmanager.xml \
     ims-ext-common \
     RcsService \
-    PresencePolling
+    PresencePolling \
+    telephony-ext
+
+PRODUCT_BOOT_JARS += telephony-ext
 
 # Init
 PRODUCT_COPY_FILES += \
@@ -231,7 +234,7 @@ PRODUCT_COPY_FILES += \
 
 # Low power Whitelist
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/qti_whitelist.xml:system/etc/sysconfigs/qti_whitelist.xml
+    $(LOCAL_PATH)/configs/qti_whitelist.xml:system/etc/sysconfig/qti_whitelist.xml
 
 # QMI
 PRODUCT_PACKAGES += \
@@ -246,16 +249,13 @@ PRODUCT_PACKAGES += \
 
 # RIL
 PRODUCT_PACKAGES += \
-    ims-ext-common \
     librmnetctl \
     libxml2 \
-    libprotobuf-cpp-full \
-    telephony-ext
+    libprotobuf-cpp-full
 
 PRODUCT_BOOT_JARS += \
     qcnvitems \
-    qcrilhook \
-    telephony-ext
+    qcrilhook
 
 # Seccomp policy
 PRODUCT_COPY_FILES += \
