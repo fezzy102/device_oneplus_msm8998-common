@@ -120,9 +120,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     fs_config_files
 
-# GPS
+# GPS / Location
 PRODUCT_PACKAGES += \
     libgnss \
+    libgnsspps \
     libgps.utils \
     liblocation_api \
     libloc_core \
