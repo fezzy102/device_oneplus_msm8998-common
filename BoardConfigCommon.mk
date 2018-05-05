@@ -215,6 +215,9 @@ ifeq ($(HOST_OS),linux)
   endif
 endif
 
+# Filesystem
+TARGET_FS_CONFIG_GEN += $(PLATFORM_PATH)/config.fs
+
 # GPS
 TARGET_NO_RPC := true
 USING_DEVICE_GPS := true
