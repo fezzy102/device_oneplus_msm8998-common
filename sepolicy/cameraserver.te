@@ -2,7 +2,9 @@ type dumpsys, domain;
 
 # Allow access to persist
 allow cameraserver persist_file:file { rw_file_perms setattr };
+
 allow cameraserver self:process { execmem };
+
 allow cameraserver shell_exec:file { r_file_perms };
 
 allow cameraserver hal_perf_hwservice:hwservice_manager { find };
@@ -12,6 +14,3 @@ allow cameraserver hal_configstore_ISurfaceFlingerConfigs:hwservice_manager { fi
 binder_call(cameraserver, hal_configstore_default)
 
 allow cameraserver nfc_data_file:dir { search };
-allow cameraserver hal_perf_hwservice:hwservice_manager { find };
-allow cameraserver shell_exec:file { execute };
-allow cameraserver debugfs:dir { open read };

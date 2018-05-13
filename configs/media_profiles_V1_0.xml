@@ -146,7 +146,6 @@
                  width="176"
                  height="144"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="amrnb"
                  bitRate="12200"
@@ -160,7 +159,6 @@
                  width="3840"
                  height="2160"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="aac"
                  bitRate="156000"
@@ -174,7 +172,6 @@
                  width="176"
                  height="144"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="amrnb"
                  bitRate="12200"
@@ -188,7 +185,6 @@
                  width="352"
                  height="288"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="amrnb"
                  bitRate="12200"
@@ -202,7 +198,6 @@
                  width="320"
                  height="240"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="amrnb"
                  bitRate="12200"
@@ -216,7 +211,6 @@
                  width="640"
                  height="480"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="aac"
                  bitRate="156000"
@@ -230,7 +224,6 @@
                  width="1280"
                  height="720"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="aac"
                  bitRate="156000"
@@ -244,7 +237,6 @@
                  width="1920"
                  height="1080"
                  frameRate="30" />
-
           <!-- audio setting is ignored -->
           <Audio codec="aac"
                  bitRate="156000"
@@ -326,7 +318,7 @@
     </CamcorderProfiles>
 
     <!-- Front Camera -->
-    <CamcorderProfiles cameraId="2">
+    <CamcorderProfiles cameraId="1">
 
         <EncoderProfile quality="low" fileFormat="3gp" duration="30">
           <Video codec="h264"
@@ -544,7 +536,7 @@
     </CamcorderProfiles>
 
     <!-- Back Camera -->
-    <CamcorderProfiles cameraId="1">
+    <CamcorderProfiles cameraId="2">
 
         <EncoderProfile quality="low" fileFormat="3gp" duration="30">
           <Video codec="h264"

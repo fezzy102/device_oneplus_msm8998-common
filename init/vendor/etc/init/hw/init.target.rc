@@ -25,6 +25,7 @@
 # OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 # IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
+#
 
 import /vendor/etc/init/hw/init.target.displaymodes.rc
 import /vendor/etc/init/hw/init.target.performance.rc
@@ -34,7 +35,7 @@ on early-init
     mkdir /bt_firmware 0771 system system
     symlink /data/tombstones /tombstones
     mkdir /dsp 0771 media media
-    write /proc/sys/kernel/sched_boost 0
+    write /proc/sys/kernel/sched_boost 1
 
 on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
@@ -57,9 +58,12 @@ on init
     # vold needs keymaster that needs qseecomd
     start qseecomd
 
+    # ZRAM setup
+    write /sys/block/zram0/comp_algorithm lz4
+    write /proc/sys/vm/page-cluster 0
+
 on fs
     mount_all /vendor/etc/fstab.qcom --early
-    swapon_all /vendor/etc/fstab.qcom
 
     # Keeping following partitions outside fstab file. As user may not have
     # these partition flashed on the device. Failure to mount any partition in fstab file
@@ -99,7 +103,7 @@ on post-fs-data
     mkdir /data/nfc
     mkdir /data/oemnvitems  0771 radio radio
 
-    # Fingerprint, changhua add for fp debug image usage,feature default off
+    # Fingerint, changhua add for fp debug image usage,feature default off
     mkdir /data/fpc_images 0770 system system
     mkdir /data/fpc_images/verify 0770 system system
     mkdir /data/fpc_images/enroll 0770 system system
@@ -115,6 +119,9 @@ on post-fs-data
     # Generate wifi mac
     start wifi-mac-generator
 
+    # Generate bt mac
+    start bt-mac-generator
+
 on boot
     start rmt_storage
     start rfs_access
@@ -122,7 +129,6 @@ on boot
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
-    # FPC1020 /sys
     chmod 0664 /sys/devices/soc/soc:fpc_fpc1020/irq
     chown system system /sys/devices/soc/soc:fpc_fpc1020/irq
     chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/report_home
@@ -131,8 +137,6 @@ on boot
     chown system system /sys/devices/soc/soc:fpc_fpc1020/report_key
     chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/update_info
     chown system system /sys/devices/soc/soc:fpc_fpc1020/update_info
-    chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/proximity_state
-    chown system system /sys/devices/soc/soc:fpc_fpc1020/proximity_state
     chmod 0660 /sys/devices/soc/soc:fpc_fpc1020/screen_state
     chown system system /sys/devices/soc/soc:fpc_fpc1020/screen_state
     chmod 0660 /sys/devices/soc/soc:fingerprint_detect/sensor_version
@@ -144,10 +148,6 @@ on boot
 
     chown system system /sys/module/fpc1020_tee/parameters/ignor_home_for_ESD
     chmod 660 /sys/module/fpc1020_tee/parameters/ignor_home_for_ESD
-
-    # Goodix /sys
-    chmod 0660 /sys/devices/soc/soc:goodix_fp/proximity_state
-    chown system system /sys/devices/soc/soc:goodix_fp/proximity_state
 
     chmod 0666 /dev/qseecom
     chmod 0666 /dev/goodix_fp
@@ -164,103 +164,53 @@ on boot
     chmod 0666 /dev/dash/
     restorecon /dev/dash
 
-    chown system system /sys/class/leds/red/pause_lo
-    chown system system /sys/class/leds/blue/pause_lo
-    chown system system /sys/class/leds/green/pause_lo
-    chmod 660 /sys/class/leds/red/pause_lo
-    chmod 660 /sys/class/leds/blue/pause_lo
-    chmod 660 /sys/class/leds/green/pause_lo
-
-    chown system system /sys/class/leds/red/pause_hi
-    chown system system /sys/class/leds/blue/pause_hi
-    chown system system /sys/class/leds/green/pause_hi
-    chmod 660 /sys/class/leds/red/pause_hi
-    chmod 660 /sys/class/leds/blue/pause_hi
-    chmod 660 /sys/class/leds/green/pause_hi
-
-    chown system system /sys/class/leds/red/blink
-    chown system system /sys/class/leds/blue/blink
-    chown system system /sys/class/leds/green/blink
-    chmod 660 /sys/class/leds/red/blink
-    chmod 660 /sys/class/leds/blue/blink
-    chmod 660 /sys/class/leds/green/blink
-
-    chown system system /sys/class/leds/rgb/rgb_blink
-    chmod 660 /sys/class/leds/rgb/rgb_blink
-
-    chown system system /sys/class/leds/red/ramp_step_ms
-    chown system system /sys/class/leds/blue/ramp_step_ms
-    chown system system /sys/class/leds/green/ramp_step_ms
-    chmod 660 /sys/class/leds/red/ramp_step_ms
-    chmod 660 /sys/class/leds/green/ramp_step_ms
-    chmod 660 /sys/class/leds/blue/ramp_step_ms
-
-    chown system system /sys/class/leds/red/duty_pcts
-    chown system system /sys/class/leds/blue/duty_pcts
-    chown system system /sys/class/leds/green/duty_pcts
-    chmod 660 /sys/class/leds/red/duty_pcts
-    chmod 660 /sys/class/leds/green/duty_pcts
-    chmod 660 /sys/class/leds/blue/duty_pcts
-
-    chown system system /sys/class/leds/red/start_idx
-    chown system system /sys/class/leds/blue/start_idx
-    chown system system /sys/class/leds/green/start_idx
-    chmod 660 /sys/class/leds/red/start_idx
-    chmod 660 /sys/class/leds/green/start_idx
-    chmod 660 /sys/class/leds/blue/start_idx
-
-    # Touchpanel
-    chown root system /proc/touchpanel/double_swipe_enable
-    chmod 0660 /proc/touchpanel/double_swipe_enable
-    chown root system /proc/touchpanel/double_tap_enable
-    chmod 0660 /proc/touchpanel/double_tap_enable
-    chown root system /proc/touchpanel/down_swipe_enable
-    chmod 0660 /proc/touchpanel/down_swipe_enable
-    chown root system /proc/touchpanel/letter_o_enable
-    chmod 0660 /proc/touchpanel/letter_o_enable
-    chown root system /proc/touchpanel/left_arrow_enable
-    chmod 0660 /proc/touchpanel/left_arrow_enable
-    chown root system /proc/touchpanel/down_arrow_enable
-    chmod 0660 /proc/touchpanel/down_arrow_enable
-    chown root system /proc/touchpanel/right_arrow_enable
-    chmod 0660 /proc/touchpanel/right_arrow_enable
-    chown root system /proc/touchpanel/draw_v_enable
-    chmod 0660 /proc/touchpanel/draw_v_enable
-    chown root system /proc/touchpanel/left_swipe_enable
-    chmod 0660 /proc/touchpanel/left_swipe_enable
-    chown root system /proc/touchpanel/right_swipe_enable
-    chmod 0660 /proc/touchpanel/right_swipe_enable
-    chown root system /proc/touchpanel/up_swipe_enable
-    chmod 0660 /proc/touchpanel/up_swipe_enable
-
-    # Buttons
-    chown root system /proc/s1302/key_rep
-    chmod 0660 /proc/s1302/key_rep
-
-    chown root system /proc/s1302/virtual_key
-    chmod 0660 /proc/s1302/virtual_key
-
-    chown root system /proc/tri-state-key/keyCode_top
-    chmod 0660 /proc/tri-state-key/keyCode_top
-
-    chown root system /proc/tri-state-key/keyCode_middle
-    chmod 0660 /proc/tri-state-key/keyCode_middle
-
-    chown root system /proc/tri-state-key/keyCode_bottom
-    chmod 0660 /proc/tri-state-key/keyCode_bottom
-
-    chown system system /sys/module/fpc1020_tee/parameters/ignor_home_for_ESD
-    chmod 660 /sys/module/fpc1020_tee/parameters/ignor_home_for_ESD
-
-    # HAL1 package list
-    setprop camera.hal1.packagelist "com.instagram.android,com.tencent.mm,com.whatsapp"
-
     chown system system /sys/class/leds/led:torch_0/brightness
     chmod 666 /sys/class/leds/led:torch_0/brightness
     chown system system /sys/class/leds/led:torch_1/brightness
     chmod 666 /sys/class/leds/led:torch_1/brightness
     chown system system /sys/class/leds/led:switch_0/brightness
     chmod 666 /sys/class/leds/led:switch_0/brightness
+
+    # Touchpanel
+    chown system system /proc/touchpanel/double_swipe_enable
+    chown system system /proc/touchpanel/double_tap_enable
+    chown system system /proc/touchpanel/down_arrow_enable
+    chown system system /proc/touchpanel/down_swipe_enable
+    chown system system /proc/touchpanel/key_disable
+    chown system system /proc/touchpanel/left_arrow_enable
+    chown system system /proc/touchpanel/left_swipe_enable
+    chown system system /proc/touchpanel/letter_m_enable
+    chown system system /proc/touchpanel/letter_o_enable
+    chown system system /proc/touchpanel/letter_s_enable
+    chown system system /proc/touchpanel/letter_w_enable
+    chown system system /proc/touchpanel/radd
+    chown system system /proc/touchpanel/right_arrow_enable
+    chown system system /proc/touchpanel/right_swipe_enable
+    chown system system /proc/touchpanel/sleep_mode_enable
+    chown system system /proc/touchpanel/tpedge_limit_enable
+    chown system system /proc/touchpanel/up_arrow_enable
+    chown system system /proc/touchpanel/up_swipe_enable
+    chmod 660 /proc/touchpanel/double_swipe_enable
+    chmod 660 /proc/touchpanel/double_tap_enable
+    chmod 660 /proc/touchpanel/down_arrow_enable
+    chmod 660 /proc/touchpanel/down_swipe_enable
+    chmod 660 /proc/touchpanel/key_disable
+    chmod 660 /proc/touchpanel/left_arrow_enable
+    chmod 660 /proc/touchpanel/left_swipe_enable
+    chmod 660 /proc/touchpanel/letter_m_enable
+    chmod 660 /proc/touchpanel/letter_o_enable
+    chmod 660 /proc/touchpanel/letter_s_enable
+    chmod 660 /proc/touchpanel/letter_w_enable
+    chmod 660 /proc/touchpanel/radd
+    chmod 660 /proc/touchpanel/right_arrow_enable
+    chmod 660 /proc/touchpanel/right_swipe_enable
+    chmod 660 /proc/touchpanel/sleep_mode_enable
+    chmod 660 /proc/touchpanel/tpedge_limit_enable
+    chmod 660 /proc/touchpanel/up_arrow_enable
+    chmod 660 /proc/touchpanel/up_swipe_enable
+
+    # HAL1 package list
+    setprop camera.hal1.packagelist "com.instagram.android,com.tencent.mm,com.whatsapp"
 
     #lifeng@bsp tp 2015/6/3 for firmware update
     write /sys/bus/i2c/devices/5-0020/tp_fw_update 0
@@ -288,14 +238,13 @@ on boot
     chown system system /persist/speccfg/submask
     chown system system /persist/speccfg/partition
 
-   # Load WLAN driver, to satisfy wificond
-   insmod /system/lib/modules/wlan.ko
-   chown wifi wifi /sys/module/wlan/parameters/fwpath
-   # will be set later
-   # setprop wlan.driver.status "ok"
-   setprop ro.boot.wificountrycode 00
+on property:sys.boot_completed=1
+    # Enable ZRAM on boot_completed
+    swapon_all /vendor/etc/fstab.qcom
 
-# Dash charging
+    #dt2w
+    write /proc/touchpanel/double_tap_enable 1
+
 service dashd /sbin/dashd
     class core
     #critical
@@ -309,6 +258,14 @@ service wifi-mac-generator /vendor/bin/wifi-mac-generator
     oneshot
     disabled
     seclabel u:r:wifi_mac_generator:s0
+
+service bt-mac-generator /system/vendor/bin/bt-mac-generator
+    class main
+    user bluetooth
+    group bluetooth
+    oneshot
+    disabled
+    seclabel u:r:bt_mac_generator:s0
 
 service per_mgr /vendor/bin/pm-service
     class core
